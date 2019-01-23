@@ -4,13 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'solidus_cloudinary/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'open_solidus_cloudinary'
+  spec.name          = 'solidus_cloudinary'
   spec.version       = SolidusCloudinary::VERSION
-  spec.authors       = ['Chloé Roger']
-  spec.email         = ['berlimioz@gmail.com']
+  spec.authors       = ['Aaron Lifton', 'Chloé Roger']
+  spec.email         = ['aaronlifton@gmail.com', 'berlimioz@gmail.com']
   spec.description   = %q{Solidus extension to use carrierwave/cloudinary instead of paperclip.}
   spec.summary       = %q{Most code is taken from https://github.com/chautoni/spree_cloudinary}
-  spec.homepage      = 'https://github.com/Berlimioz'
+  spec.homepage      = 'https://github.com/dstld/solidus_cloudinary'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
@@ -21,7 +21,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'bundler', '>= 1.3'
   spec.add_development_dependency 'rake', '>= 11.1.2'
 
-  spec.add_dependency 'solidus_core', '>= 1.3.0.rc1'
+  # spec.add_dependency 'solidus_core', '>= 1.3.0.rc1'
+  spec.add_dependency 'solidus_core', '~> 1.0.0'
   spec.add_dependency 'carrierwave', '~> 0.11.2'
   spec.add_dependency 'cloudinary', '~> 1.1.7'
 end

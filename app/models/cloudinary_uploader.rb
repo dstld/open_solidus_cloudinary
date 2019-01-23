@@ -12,25 +12,35 @@ class CloudinaryUploader < CarrierWave::Uploader::Base
   end
 
   # These are the versions defined in Spree::Image
-  version :mini do
-    process :resize_to_fit => [48, 48]
-  end
+  # Can be overriden by a subclass
+  # version :mini do
+  #   process :resize_to_fit => [48, 48]
+  # end
 
-  version :small do
-    process :resize_to_fit => [100, 100]
-  end
+  # version :small do
+  #   process :resize_to_fit => [100, 100]
+  # end
 
-  version :product do
-    process :resize_to_fit => [240, 240]
-  end
+  # version :product do
+  #   process :resize_to_fit => [240, 240]
+  # end
 
-  version :large do
-    process :resize_to_fit => [600, 600]
-  end
+  # version :large do
+  #   process :resize_to_fit => [600, 600]
+  # end
 
   def flush_errors;end
   def dirty?;end
   def save; end
   def queue_all_for_delete; end
   def flush_deletes; end
+
+  # new stuff
+  def default_url(options={})
+    metadata["url"] if metadata
+  end
+
+  def stored_version
+    metadata["version"] if metadata
+  end
 end
