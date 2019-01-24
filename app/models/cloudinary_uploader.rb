@@ -13,6 +13,7 @@ class CloudinaryUploader < CarrierWave::Uploader::Base
 
   # These are the versions defined in Spree::Image
   # Can be overriden by a subclass
+  # Are eager by default
   # version :mini do
   #   process :resize_to_fit => [48, 48]
   # end
