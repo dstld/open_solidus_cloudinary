@@ -1,26 +1,30 @@
-Spree::Image.class_eval do
-  if ENV["LEGACY_PAPERCLIP_ATTACHMENT"]
-    has_attached_file :legacy_attachment,
-                      self.attachment_definitions[:attachment]
+Spree::Image.extend(CloudinaryImageClassMethods = Module.new do
+  def mount_custom_uploader(uploader)
+    mount_uploader :attachment, uploader, mount_on: :attachment_file_name
+  end
+end)
 
-    self.attachment_definitions[:legacy_attachment][:keep_old_files] = true
+Spree::Image.prepend(CloudinaryImageDecorator = Module.new do
+  def self.prepended(base)
+    if ENV["LEGACY_PAPERCLIP_ATTACHMENT"]
+      base.has_attached_file :legacy_attachment,
+                        base.attachment_definitions[:attachment]
 
-    cols = Spree::Image.columns.map(&:name)
+      base.attachment_definitions[:legacy_attachment][:keep_old_files] = true
 
-    [:attachment_file_name, :attachment_width,
-      :attachment_file_size, :attachment_content_type,
-      :attachment_updated_at, :attachment_fingerprint
-    ].each do |mth|
-      unless cols.include?("legacy_#{mth}")
-        define_method "legacy_#{mth}" do
-          attributes[mth.to_s]
+      cols = Spree::Image.columns.map(&:name)
+
+      [:attachment_file_name, :attachment_width,
+        :attachment_file_size, :attachment_content_type,
+        :attachment_updated_at, :attachment_fingerprint
+      ].each do |mth|
+        unless cols.include?("legacy_#{mth}")
+          base.send :define_method, "legacy_#{mth}" do
+            attributes[mth.to_s]
+          end
         end
       end
     end
-  end
-
-  def self.mount_custom_uploader(uploader)
-    self.mount_uploader :attachment, uploader, :mount_on => :attachment_file_name
   end
 
   # Get rid of the paperclip callbacks
@@ -36,11 +40,4 @@ Spree::Image.class_eval do
       super().url(version)
     end
   end
-
-
-  # i.attachment=open(i.legacy_attachment.url)
-  # Get rid of Paperclip validation
-  # def attachment_file_name
-  #   "not_blank"
-  # end
-end
+end)

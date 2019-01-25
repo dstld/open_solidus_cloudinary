@@ -1,15 +1,15 @@
 class CloudinaryUploader < CarrierWave::Uploader::Base
-  include CarrierWave::Compatibility::Paperclip
+  # include CarrierWave::Compatibility::Paperclip
   include Cloudinary::CarrierWave
 
-  process :convert => 'png'
+  # process :convert => 'png'
   # Spree looks in attachment#errors, so just delegate to model#errors
   delegate :errors, :to => :model
 
   # Match the path defined in Spree::Image
-  def paperclip_path
-    "assets/products/:id/:style/:basename.:extension"
-  end
+  # def paperclip_path
+  #   "assets/products/:id/:style/:basename.:extension"
+  # end
 
   # These are the versions defined in Spree::Image
   # Can be overriden by a subclass
