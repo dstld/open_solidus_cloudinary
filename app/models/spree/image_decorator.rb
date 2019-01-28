@@ -6,6 +6,11 @@ end)
 
 Spree::Image.prepend(CloudinaryImageDecorator = Module.new do
   def self.prepended(base)
+    Spree::Image._validators.reject! { |k,_| k == :attachment }
+    Spree::Image._validate_callbacks.select { |cb| cb.raw_filter.class.to_s.include?("Paperclip") }
+      .each { |cb| cb.filter.attributes.delete(:attachment) }
+
+
     if ENV["LEGACY_PAPERCLIP_ATTACHMENT"]
       base.has_attached_file :legacy_attachment,
                         base.attachment_definitions[:attachment]
