@@ -11,7 +11,7 @@ Spree::Image.prepend(CloudinaryImageDecorator = Module.new do
       .each { |cb| cb.filter.attributes.delete(:attachment) }
 
 
-    if ENV["LEGACY_PAPERCLIP_ATTACHMENT"]
+    if ENV["LEGACY_PAPERCLIP_ATTACHMENT"] && ActiveRecord::Base.connection.table_exists?('spree_assets')
       base.has_attached_file :legacy_attachment,
                         base.attachment_definitions[:attachment]
 
@@ -30,6 +30,7 @@ Spree::Image.prepend(CloudinaryImageDecorator = Module.new do
         end
       end
     end
+
   end
 
   # Get rid of the paperclip callbacks
